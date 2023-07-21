@@ -1,10 +1,8 @@
 package com.samm.webscraper
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,23 +14,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
 import com.samm.webscraper.ui.theme.WebScraperTheme
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.jsoup.nodes.Element
 import org.koin.android.ext.android.get
-import org.koin.core.Koin
 import org.koin.core.context.startKoin
+
+/*
+    Todo:
+        - Have the scraper run in the background and scrape data when the app is closed
+        - Save scraped data to a "history" table in a database - mongodb or sqlite idc.
+ */
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -54,7 +51,7 @@ class MainActivity : ComponentActivity() {
 
                     val state = viewModel.state.collectAsState().value
                     var text by remember { mutableStateOf("") }
-                    var isButtonClicked by remember { mutableStateOf(false) }
+
                     val symbol = state?.data?.symbol
                     val marketChange = state?.data?.stockMarketChange ?: "Not found"
                     val price = state?.data?.stockPrice ?: "Not found"
@@ -69,7 +66,6 @@ class MainActivity : ComponentActivity() {
                         Button(
                             onClick = {
                                 viewModel.getData(text)
-                                isButtonClicked = true
                             },
                             modifier = Modifier.padding(top = 15.dp)
                         ) {
@@ -92,22 +88,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    WebScraperTheme {
-        Greeting("Android")
     }
 }

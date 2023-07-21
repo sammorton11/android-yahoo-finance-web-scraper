@@ -23,7 +23,6 @@ class RepositoryImpl: Repository {
             stockPrice = stockPriceElement.text()
         } catch (e: Exception) {
             Log.e("YahooFinanceScraper", "Error scraping data for $stockSymbol: ${e.message}")
-            // Handle the error accordingly, e.g., return a default Stock object or throw an exception.
         }
         return Stock(stockSymbol, stockMarketChange, stockPercentChange, stockPrice)
     }
